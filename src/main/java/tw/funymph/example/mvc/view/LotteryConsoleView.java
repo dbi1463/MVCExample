@@ -30,6 +30,8 @@ import java.util.List;
 
 import tw.funymph.example.mvc.model.Ball;
 import tw.funymph.example.mvc.model.LotteryMachine;
+import tw.funymph.example.mvc.model.LotteryResult;
+import tw.funymph.example.mvc.model.LotteryResultListener;
 
 /**
  * This view show the lottery resulting balls in the console. In the view,
@@ -40,7 +42,7 @@ import tw.funymph.example.mvc.model.LotteryMachine;
  * @version 1.0
  * @since 1.0
  */
-public class LotteryConsoleView {
+public class LotteryConsoleView implements LotteryResultListener {
 
 	private LotteryMachine model;
 
@@ -61,6 +63,7 @@ public class LotteryConsoleView {
 			throw new IllegalArgumentException("the machine can not be null");
 		}
 		model = machine;
+		model.addLotteryResultListener(this);
 		showResultingBalls();
 	}
 
@@ -77,5 +80,11 @@ public class LotteryConsoleView {
 				out.print("(" + ball.getNumber() + ") ");
 			}
 		}
+		out.println();
+	}
+
+	@Override
+	public void resultUpdated(LotteryResult result) {
+		showResultingBalls();
 	}
 }

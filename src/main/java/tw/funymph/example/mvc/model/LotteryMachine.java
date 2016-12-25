@@ -29,7 +29,9 @@ import static java.util.Collections.shuffle;
 import static java.util.Collections.unmodifiableList;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class represents the model of a lottery machine.
@@ -38,7 +40,7 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-public class LotteryMachine {
+public class LotteryMachine implements LotteryResult {
 
 	public static int NO_SPECIAL_BALL_INDEX = -1;
 	public static int DEFAULT_MIN_BALL_NUMBER = 1;
@@ -55,6 +57,7 @@ public class LotteryMachine {
 
 	private List<Integer> availableBalls;
 	private List<Ball> resultingBalls;
+	private Set<LotteryResultListener> listeners;
 
 	/**
 	 * Construct a <code>LotteryMachine</code> in which ball number started from 1 to the
@@ -114,6 +117,7 @@ public class LotteryMachine {
 		minBallNumber = minNumber;
 		maxBallNumber = maxNumber;
 		specialBallIndex = specialIndex;
+		listeners = new HashSet<LotteryResultListener>();
 	}
 
 	/**
@@ -129,20 +133,43 @@ public class LotteryMachine {
 		for (int index = 1; index <= resultCount; index++) {
 			shuffle(availableBalls);
 			resultingBalls.add(new Ball(availableBalls.get(0).intValue(), (index == specialBallIndex)));
+			notifyResultUpdated();
 			if (uniqueBall) {
 				availableBalls.remove(0);
 			}
 		}
 	}
 
-	/**
-	 * Get the resulting balls. There is no guarantee of that calling this method once can
-	 * get all of the final results. 
-	 * 
-	 * @return the resulting balls
-	 */
+	@Override
 	public List<Ball> getResultingBalls() {
 		return rolled? unmodifiableList(resultingBalls) : emptyList();
+	}
+
+	/**
+	 * Add the listener into the notification list.
+	 * 
+	 * @param listener the listener to add
+	 */
+	public void addLotteryResultListener(LotteryResultListener listener) {
+		listeners.add(listener);
+	}
+
+	/**
+	 * Remove the listener from the notification list.
+	 * 
+	 * @param listener the listener to remove
+	 */
+	public void removeLotteryResultListener(LotteryResultListener listener) {
+		listeners.remove(listener);
+	}
+
+	/**
+	 * Notify all registered listeners that the result is updated.
+	 */
+	private void notifyResultUpdated() {
+		for (LotteryResultListener listener : listeners) {
+			listener.resultUpdated(this);
+		}
 	}
 
 	/**
