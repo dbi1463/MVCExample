@@ -28,7 +28,6 @@ import static javafx.scene.layout.HBox.setMargin;
 
 import java.util.List;
 
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -39,7 +38,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import tw.funymph.example.mvc.model.Ball;
-import tw.funymph.example.mvc.model.LotteryMachine;
+import tw.funymph.example.mvc.model.LotteryModel;
 import tw.funymph.example.mvc.model.LotteryResult;
 import tw.funymph.example.mvc.model.LotteryResultListener;
 
@@ -50,21 +49,21 @@ import tw.funymph.example.mvc.model.LotteryResultListener;
  * @version 1.0
  * @since 1.0
  */
-public class JavaFXLotteryView extends Application implements LotteryResultListener {
+public class JavaFXLotteryView extends Stage implements LotteryResultListener {
 
-	private LotteryMachine model;
+	private LotteryModel model;
 
 	private HBox container;
 	private BorderPane root;
 	private Button rollButton;
 
-	public static void main(String[] args) {
-		launch(args);
-	}
-
-	@Override
-	public void start(Stage stage) {
-		model = new LotteryMachine(49, 7, 7);
+	/**
+	 * Construct a <code>JavaFXLotteryView</code> view with the lottery model.
+	 * 
+	 * @param lotteryModel the lottery model
+	 */
+	public JavaFXLotteryView(LotteryModel lotteryModel) {
+		model = lotteryModel;
 		model.addLotteryResultListener(this);
 		container = new HBox();
 		root = new BorderPane();
@@ -73,9 +72,8 @@ public class JavaFXLotteryView extends Application implements LotteryResultListe
 		root.setLeft(rollButton);
 		BorderPane.setMargin(rollButton, new Insets(8, 0, 8, 5));
 		Scene scence = new Scene(root, 370, 45);
-		stage.setScene(scence);
-		stage.setTitle("Lottery");
-		stage.show();
+		setScene(scence);
+		setTitle("Lottery");
 		rollButton.setOnAction(this::roll);
 	}
 
