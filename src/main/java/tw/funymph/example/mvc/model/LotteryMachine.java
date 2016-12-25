@@ -40,7 +40,7 @@ import java.util.Set;
  * @version 1.0
  * @since 1.0
  */
-public class LotteryMachine implements LotteryResult {
+public class LotteryMachine implements LotteryModel {
 
 	public static int NO_SPECIAL_BALL_INDEX = -1;
 	public static int DEFAULT_MIN_BALL_NUMBER = 1;
@@ -49,14 +49,13 @@ public class LotteryMachine implements LotteryResult {
 	private int resultCount;
 	private int minBallNumber;
 	private int maxBallNumber;
-	
 	private int specialBallIndex;
 
 	private boolean rolled;
 	private boolean uniqueBall;
 
-	private List<Integer> availableBalls;
 	private List<Ball> resultingBalls;
+	private List<Integer> availableBalls;
 	private Set<LotteryResultListener> listeners;
 
 	/**
@@ -120,9 +119,7 @@ public class LotteryMachine implements LotteryResult {
 		listeners = new HashSet<LotteryResultListener>();
 	}
 
-	/**
-	 * Roll the balls.
-	 */
+	@Override
 	public void roll() {
 		if (rolled) {
 			throw new IllegalArgumentException("can not roll again");
@@ -145,20 +142,22 @@ public class LotteryMachine implements LotteryResult {
 		return rolled? unmodifiableList(resultingBalls) : emptyList();
 	}
 
-	/**
-	 * Add the listener into the notification list.
-	 * 
-	 * @param listener the listener to add
-	 */
+	@Override
+	public int getFinalResultCount() {
+		return resultCount;
+	}
+
+	@Override
+	public void reset() {
+		rolled = false;
+	}
+
+	@Override
 	public void addLotteryResultListener(LotteryResultListener listener) {
 		listeners.add(listener);
 	}
 
-	/**
-	 * Remove the listener from the notification list.
-	 * 
-	 * @param listener the listener to remove
-	 */
+	@Override
 	public void removeLotteryResultListener(LotteryResultListener listener) {
 		listeners.remove(listener);
 	}

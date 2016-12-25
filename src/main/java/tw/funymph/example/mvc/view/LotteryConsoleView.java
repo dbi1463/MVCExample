@@ -30,6 +30,7 @@ import java.util.List;
 
 import tw.funymph.example.mvc.model.Ball;
 import tw.funymph.example.mvc.model.LotteryMachine;
+import tw.funymph.example.mvc.model.LotteryModel;
 import tw.funymph.example.mvc.model.LotteryResult;
 import tw.funymph.example.mvc.model.LotteryResultListener;
 
@@ -44,7 +45,7 @@ import tw.funymph.example.mvc.model.LotteryResultListener;
  */
 public class LotteryConsoleView implements LotteryResultListener {
 
-	private LotteryMachine model;
+	private LotteryModel model;
 
 	public static void main(String[] args) {
 		LotteryMachine machine = new LotteryMachine(49, 7, 7);
@@ -59,7 +60,7 @@ public class LotteryConsoleView implements LotteryResultListener {
 	 * 
 	 * @param machine the lottery machine
 	 */
-	public LotteryConsoleView(LotteryMachine machine) {
+	public LotteryConsoleView(LotteryModel machine) {
 		if (machine == null) {
 			throw new IllegalArgumentException("the machine can not be null");
 		}

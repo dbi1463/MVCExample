@@ -29,10 +29,13 @@ import static javafx.scene.layout.HBox.setMargin;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import tw.funymph.example.mvc.model.Ball;
@@ -52,6 +55,8 @@ public class JavaFXLotteryView extends Application implements LotteryResultListe
 	private LotteryMachine model;
 
 	private HBox container;
+	private BorderPane root;
+	private Button rollButton;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -62,16 +67,31 @@ public class JavaFXLotteryView extends Application implements LotteryResultListe
 		model = new LotteryMachine(49, 7, 7);
 		model.addLotteryResultListener(this);
 		container = new HBox();
-		Scene scence = new Scene(container, 325, 45);
+		root = new BorderPane();
+		rollButton = new Button("Roll");
+		root.setCenter(container);
+		root.setLeft(rollButton);
+		BorderPane.setMargin(rollButton, new Insets(8, 0, 8, 5));
+		Scene scence = new Scene(root, 370, 45);
 		stage.setScene(scence);
 		stage.setTitle("Lottery");
 		stage.show();
-		model.roll();
+		rollButton.setOnAction(this::roll);
 	}
 
 	@Override
 	public void resultUpdated(LotteryResult result) {
 		displayBalls();
+	}
+
+	/**
+	 * The simple controller.
+	 * 
+	 * @param e the action event
+	 */
+	private void roll(ActionEvent e) {
+		model.reset();
+		model.roll();
 	}
 
 	/**
