@@ -48,6 +48,7 @@ public class LotteryConsoleView implements LotteryResultListener {
 
 	public static void main(String[] args) {
 		LotteryMachine machine = new LotteryMachine(49, 7, 7);
+		@SuppressWarnings("unused")
 		LotteryConsoleView view = new LotteryConsoleView(machine);
 		machine.roll();
 	}

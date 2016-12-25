@@ -103,6 +103,14 @@
 				<artifactId>maven-pmd-plugin</artifactId>
 				<version>3.6</version>
 			</plugin>
+			<plugin>
+				<groupId>com.zenjava</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>8.2.0</version>
+				<configuration>
+					<mainClass>tw.funymph.example.mvc.view.JavaFXLotteryView</mainClass>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<licenses>
